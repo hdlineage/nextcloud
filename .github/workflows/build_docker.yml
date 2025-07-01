@@ -7,6 +7,10 @@ on:
         description: 'Docker image tag'
         required: true
         default: 'latest'
+      iframe_url:
+        description: 'Iframe URL to allow'
+        required: true
+        default: 'https://google.com'
 
 jobs:
 
@@ -26,7 +30,7 @@ jobs:
           password: ${{ secrets.DOCKER_TOKEN }}
           
       - name: Build the Docker image
-        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/nextcloud:${{ github.event.inputs.tag }} .
+        run: docker build --build-arg IFRAME_URL=${{ github.event.inputs.iframe_url }} -t ${{ secrets.DOCKER_USERNAME }}/nextcloud:${{ github.event.inputs.tag }} .
 
       - name: Push the Docker image
         run: docker push ${{ secrets.DOCKER_USERNAME }}/nextcloud:${{ github.event.inputs.tag }}
